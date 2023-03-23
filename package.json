@@ -1,0 +1,17 @@
+{
+  "name": "nodejs_basic",
+  "version": "1.0.0",
+  "description": "Nodejs with HoidanIT",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "Nodejs",
+    "Nodejs-basic",
+    "Nodejs-With-HoidanIT"
+  ],
+  "author": "Vinh Trinh",
+  "license": "ISC"
+}
