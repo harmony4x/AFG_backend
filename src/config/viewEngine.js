@@ -8,6 +8,11 @@ const configViewEngine = (app) => {
 
     //Config statis file 
     app.use(express.static(path.join('./src', 'public')))
+
+
+    // Config req.body
+    app.use(express.json())
+    app.use(express.urlencoded({ extended: true }))
 }
 
 module.exports = configViewEngine;
