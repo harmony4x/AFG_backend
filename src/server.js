@@ -5,9 +5,20 @@ const app = express()
 const path = require('path');
 const configViewEngine = require('./config/viewEngine');
 const webRouter = require('./routes/web')
-configViewEngine(app)
-app.use('/', webRouter)
+const connection = require('../src/config/database')
 
-app.listen(port, () => {
-    console.log(`Example listening on port ${port}`);
-});
+configViewEngine(app)
+app.use('/', webRouter);
+
+
+(async () => {
+    try {
+        await connection();
+        app.listen(port, () => {
+            console.log(`Example listening on port ${port}`);
+        });
+    } catch (error) {
+        console.error('>>>>>Check error: ', error);
+    }
+})();
+
