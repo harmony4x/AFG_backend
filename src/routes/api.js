@@ -1,9 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const { getHomePage } = require('../controllers/apiController')
+const { getHomePage, createUser, updateUser, deleteUser } = require('../controllers/apiController')
 
 
-router.get('/', getHomePage)
-
-
+router.get('/user', getHomePage)
+router.post('/user', createUser)
+router.put('/user', updateUser)
+router.delete('/user', deleteUser)
 module.exports = router;
