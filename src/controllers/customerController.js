@@ -1,5 +1,5 @@
 
-const { createCustomerService, createArrayCustomerService, getAllCustomersService, updateACustomerService, deleteACustomerService } = require('../services/customerService');
+const { createCustomerService, createArrayCustomerService, getAllCustomersService, updateACustomerService, deleteACustomerService, deleteArrayCustomerService } = require('../services/customerService');
 const { uploadSingleFile } = require('../services/fileService');
 
 module.exports = {
@@ -87,6 +87,14 @@ module.exports = {
     deleteACustomer: async (req, res) => {
         let _id = req.body.id;
         let result = await deleteACustomerService(_id);
+        return res.status(200).json({
+            errorCode: 0,
+            data: result
+        })
+    },
+    deleteArrayCustomer: async (req, res) => {
+        let data_id = req.body._id;
+        let result = await deleteArrayCustomerService(data_id);
         return res.status(200).json({
             errorCode: 0,
             data: result

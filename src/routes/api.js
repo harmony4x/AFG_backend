@@ -12,6 +12,7 @@ const { createCustomerUser,
     getAllCustomers,
     updateACustomer,
     deleteACustomer,
+    deleteArrayCustomer,
 } = require('../controllers/customerController')
 
 
@@ -28,5 +29,6 @@ router.post('/customers', createArrayUser);
 router.get('/customers', getAllCustomers);
 router.put('/customers', updateACustomer);
 router.delete('/customers', deleteACustomer);
+router.delete('/customers-many', deleteArrayCustomer);
 
 module.exports = router;
