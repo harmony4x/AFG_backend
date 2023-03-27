@@ -1,5 +1,5 @@
 
-const { createCustomerService } = require('../services/customerService');
+const { createCustomerService, createArrayCustomerService } = require('../services/customerService');
 const { uploadSingleFile } = require('../services/fileService');
 
 module.exports = {
@@ -18,9 +18,32 @@ module.exports = {
         }
 
         let customer = await createCustomerService(customerData);
-        return res.status(200).json({
-            errorCode: 0,
-            data: customer
-        })
+        if (customer) {
+            return res.status(200).json({
+                errorCode: 0,
+                data: customer
+            })
+        } else {
+            return res.status(200).json({
+                errorCode: -1,
+                data: ""
+            })
+        }
+
+    },
+    createArrayUser: async (req, res) => {
+        let data = req.body.customers;
+        let result = await createArrayCustomerService(data);
+        if (result) {
+            return res.status(200).json({
+                errorCode: 0,
+                data: result
+            })
+        } else {
+            return res.status(200).json({
+                errorCode: -1,
+                data: null
+            })
+        }
     }
 }
