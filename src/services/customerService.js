@@ -1,19 +1,20 @@
 const Customer = require('../models/customer');
 
 const createCustomerService = async (customerData) => {
-    let { name, email, adress, phone, description, imageUrl } = customerData;
+    let { name, email, address, phone, description, imageUrl } = customerData;
 
     try {
         let res = await Customer.create({
             name,
             email,
-            adress,
+            address,
             phone,
             description,
             image: imageUrl
         })
         return res
     } catch (error) {
+        console.log(error);
         return null;
     }
 
@@ -25,6 +26,46 @@ const createArrayCustomerService = (data) => {
         let res = Customer.insertMany(customers);
         return res;
     } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+const getAllCustomersService = async () => {
+    try {
+        let res = await Customer.find({});
+        return res;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+const updateACustomerService = async (data) => {
+    try {
+        let { name, email, address, phone, description, _id } = data;
+        let res = await Customer.updateOne(
+            {
+                _id
+            },
+            {
+                name, email, address, phone, description
+            }
+        )
+        return res;
+
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+const deleteACustomerService = async (_id) => {
+    try {
+        let result = await Customer.deleteById(_id);
+        return result;
+    } catch (error) {
+        console.log(error);
         return null;
     }
 }
@@ -32,4 +73,7 @@ const createArrayCustomerService = (data) => {
 module.exports = {
     createCustomerService,
     createArrayCustomerService,
+    getAllCustomersService,
+    updateACustomerService,
+    deleteACustomerService,
 }

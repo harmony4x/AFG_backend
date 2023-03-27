@@ -1,5 +1,5 @@
 
-const { createCustomerService, createArrayCustomerService } = require('../services/customerService');
+const { createCustomerService, createArrayCustomerService, getAllCustomersService, updateACustomerService, deleteACustomerService } = require('../services/customerService');
 const { uploadSingleFile } = require('../services/fileService');
 
 module.exports = {
@@ -22,7 +22,7 @@ module.exports = {
         } else {
 
 
-            let { name, email, adress, phone, description } = req.body;
+            let { name, email, address, phone, description } = req.body;
             let imageUrl = '';
             if (!req.files || Object.keys(req.files).length === 0) {
 
@@ -32,7 +32,7 @@ module.exports = {
                 imageUrl = result.path;
             }
             let customerData = {
-                name, email, adress, phone, description, imageUrl
+                name, email, address, phone, description, imageUrl
             }
 
             let customer = await createCustomerService(customerData);
@@ -64,5 +64,32 @@ module.exports = {
                 data: null
             })
         }
+    },
+    getAllCustomers: async (req, res) => {
+        let result = await getAllCustomersService();
+        return res.status(200).json({
+            errorCode: 0,
+            data: result
+        })
+
+    },
+    updateACustomer: async (req, res) => {
+        let { name, email, address, phone, description, _id } = req.body;
+        let data = {
+            name, email, address, phone, description, _id
+        }
+        let result = await updateACustomerService(data);
+        return res.status(200).json({
+            errorCode: 0,
+            data: result
+        })
+    },
+    deleteACustomer: async (req, res) => {
+        let _id = req.body.id;
+        let result = await deleteACustomerService(_id);
+        return res.status(200).json({
+            errorCode: 0,
+            data: result
+        })
     }
 }
