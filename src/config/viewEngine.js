@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const fileUpload = require('express-fileupload')
 
 const configViewEngine = (app) => {
     //Config template
@@ -13,6 +14,10 @@ const configViewEngine = (app) => {
     // Config req.body
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
+
+    // Config uploadfile 
+    app.use(fileUpload());
+
 }
 
 module.exports = configViewEngine;

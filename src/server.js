@@ -9,6 +9,8 @@ const apiRouter = require('./routes/api');
 const connection = require('../src/config/database')
 
 configViewEngine(app)
+
+
 app.use('/', webRouter);
 app.use('/v1/api', apiRouter);
 

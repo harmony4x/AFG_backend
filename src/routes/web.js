@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { getHomePage, createUser, getAllUser } = require('../controllers/homeController')
+const { getHomePage, createUser, getAllUser, uploadFile } = require('../controllers/homeController')
 
 
 router.get('/', getHomePage)
