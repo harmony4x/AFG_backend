@@ -66,7 +66,15 @@ module.exports = {
         }
     },
     getAllCustomers: async (req, res) => {
-        let result = await getAllCustomersService();
+        let { limit, page } = req.query
+
+        let result = null;
+        if (limit && page) {
+            result = await getAllCustomersService(limit, page);
+        } else {
+            result = await getAllCustomersService();
+        }
+
         return res.status(200).json({
             errorCode: 0,
             data: result
