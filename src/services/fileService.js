@@ -34,7 +34,7 @@ const uploadMultipleFile = async (filesArr) => {
         countSuccess = 0
         for (let i = 0; i < filesArr.length; i++) {
             let myFileName = filesArr[i].name;
-            console.log(i)
+
             myFileName = myFileName.split('.').join('-' + Date.now() + '.');
             let uploadPath = __dirname + '/../public/images/upload/' + myFileName;
 

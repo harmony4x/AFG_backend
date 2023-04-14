@@ -1,21 +1,22 @@
 const Customer = require('../models/customer');
+const aqp = require('api-query-params');
+
+
+const isExits = async (email) => {
+    const checkEmail = await Customer.findOne({ email });
+    return checkEmail;
+}
 
 const createCustomerService = async (customerData) => {
-    let { name, email, address, phone, description, imageUrl } = customerData;
-
     try {
-        let res = await Customer.create({
-            name,
-            email,
-            address,
-            phone,
-            description,
-            image: imageUrl
+        let user = new Customer({
+            ...customerData
         })
+
+        let res = await user.save();
         return res
     } catch (error) {
-        console.log(error);
-        return null;
+        return error;
     }
 
 }
@@ -31,38 +32,45 @@ const createArrayCustomerService = (data) => {
     }
 }
 
-const getAllCustomersService = async (limit, page) => {
+const getAllCustomersService = async (queryString) => {
     try {
+
         let result = null;
+        let { filter, limit } = aqp(queryString)
+        let { page, population } = filter;
         if (limit && page) {
+            delete filter.page
+            delete filter.population
             offset = (page - 1) * limit;
-            result = await Customer.find({}).skip(offset).limit(limit).exec();
+            result = await Customer.find(filter).skip(offset).limit(limit).populate(population).exec();
         } else {
-            result = await Customer.find({});
+            result = await Customer.find({}).populate(population).exec();
+
         }
         return result;
     } catch (error) {
-        console.log(error);
-        return null;
+
+        return error;
     }
 }
 
 const updateACustomerService = async (data) => {
     try {
-        let { name, email, address, phone, description, _id } = data;
+
         let res = await Customer.updateOne(
             {
-                _id
+                ...data._id
             },
+
             {
-                name, email, address, phone, description
+                ...data
             }
         )
         return res;
 
     } catch (error) {
-        console.log(error);
-        return null;
+
+        return error;
     }
 }
 
@@ -71,8 +79,8 @@ const deleteACustomerService = async (_id) => {
         let result = await Customer.deleteById(_id);
         return result;
     } catch (error) {
-        console.log(error);
-        return null;
+
+        return error;
     }
 }
 
@@ -93,4 +101,5 @@ module.exports = {
     updateACustomerService,
     deleteACustomerService,
     deleteArrayCustomerService,
+    isExits,
 }

@@ -1,53 +1,55 @@
 
-const { createCustomerService, createArrayCustomerService, getAllCustomersService, updateACustomerService, deleteACustomerService, deleteArrayCustomerService } = require('../services/customerService');
+const { userValidate } = require('../middleware/validation');
+const { createCustomerService, createArrayCustomerService, getAllCustomersService, updateACustomerService, deleteACustomerService, deleteArrayCustomerService, isExits } = require('../services/customerService');
 const { uploadSingleFile } = require('../services/fileService');
+const createError = require('http-errors');
+const bcrypt = require('bcrypt');
+const { uploadFile } = require('../models/upload');
 
 module.exports = {
-    createCustomerUser: async (req, res) => {
-        if (req.body.customers = true && Array.isArray(req.body.customers)) {
-            let data = req.body.customers;
+    createCustomerUser: async (req, res, next) => {
 
-            let result = await createArrayCustomerService(data);
-            if (result) {
-                return res.status(200).json({
-                    errorCode: 0,
-                    data: result
-                })
-            } else {
-                return res.status(200).json({
-                    errorCode: -1,
-                    data: null
-                })
+        try {
+            let { email } = req.body;
+            let { error } = userValidate(req.body);
+
+            if (error) {
+                throw createError(error.details[0].message)
             }
-        } else {
 
+            const checkEmail = await isExits(email);
 
-            let { name, email, address, phone, description } = req.body;
-            let imageUrl = '';
+            if (checkEmail !== null) {
+                throw createError.Conflict(`${email} is already registered`);
+            }
+
+            let uploadImage = '';
             if (!req.files || Object.keys(req.files).length === 0) {
 
             } else {
                 file = req.files.image;
                 let result = await uploadSingleFile(file);
-                imageUrl = result.path;
+                uploadImage = result.path;
             }
-            let customerData = {
-                name, email, address, phone, description, imageUrl
-            }
+            const image = await uploadFile({ shared: true }, uploadImage)
+            let customerData = { ...req.body, image }
 
             let customer = await createCustomerService(customerData);
             if (customer) {
                 return res.status(200).json({
                     errorCode: 0,
-                    data: customer
-                })
-            } else {
-                return res.status(200).json({
-                    errorCode: -1,
-                    data: ""
+                    data: customer,
+                    msg: "Sucessfully created customer"
                 })
             }
+
+        } catch (error) {
+            res.json({
+                errorCode: -1,
+                msg: error
+            })
         }
+
     },
     createArrayUser: async (req, res) => {
         let data = req.body.customers;
@@ -57,6 +59,7 @@ module.exports = {
             return res.status(200).json({
                 errorCode: 0,
                 data: result
+
             })
         } else {
             return res.status(200).json({
@@ -66,39 +69,53 @@ module.exports = {
         }
     },
     getAllCustomers: async (req, res) => {
-        let { limit, page } = req.query
+        try {
+            result = await getAllCustomersService(req.query);
 
-        let result = null;
-        if (limit && page) {
-            result = await getAllCustomersService(limit, page);
-        } else {
-            result = await getAllCustomersService();
+            return res.status(200).json({
+                errorCode: 0,
+                data: result
+            })
+        } catch (error) {
+            return res.status(200).json({
+                errorCode: 0,
+                data: error
+            })
         }
 
-        return res.status(200).json({
-            errorCode: 0,
-            data: result
-        })
 
     },
     updateACustomer: async (req, res) => {
-        let { name, email, address, phone, description, _id } = req.body;
-        let data = {
-            name, email, address, phone, description, _id
+        try {
+            let data = req.body;
+            let result = await updateACustomerService(data);
+            return res.status(200).json({
+                errorCode: 0,
+                data: result
+
+            })
+        } catch (error) {
+            return res.status(200).json({
+                errorCode: -1,
+                data: error
+
+            })
         }
-        let result = await updateACustomerService(data);
-        return res.status(200).json({
-            errorCode: 0,
-            data: result
-        })
     },
     deleteACustomer: async (req, res) => {
-        let _id = req.body.id;
-        let result = await deleteACustomerService(_id);
-        return res.status(200).json({
-            errorCode: 0,
-            data: result
-        })
+        try {
+            let { _id } = req.body;
+            let result = await deleteACustomerService(_id);
+            return res.status(200).json({
+                errorCode: 0,
+                data: result
+            })
+        } catch (error) {
+            return res.status(200).json({
+                errorCode: -1,
+                data: error
+            })
+        }
     },
     deleteArrayCustomer: async (req, res) => {
         let data_id = req.body._id;
