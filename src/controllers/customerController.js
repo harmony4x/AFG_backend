@@ -11,6 +11,8 @@ module.exports = {
 
         try {
             let { email } = req.body;
+            let phone = '';
+            let birthday = new Date();
             let { error } = userValidate(req.body);
 
             if (error) {
@@ -32,7 +34,7 @@ module.exports = {
                 uploadImage = result.path;
             }
             const image = await uploadFile({ shared: true }, uploadImage)
-            let customerData = { ...req.body, image }
+            let customerData = { ...req.body, image, phone, birthday }
 
             let customer = await createCustomerService(customerData);
             if (customer) {
@@ -87,7 +89,10 @@ module.exports = {
     },
     updateACustomer: async (req, res) => {
         try {
-            let data = req.body;
+            let { name, email, address, phone, role, gender, password, _id } = req.body;
+            let data = {
+                name, email, address, phone, role, gender, password, _id
+            }
             let result = await updateACustomerService(data);
             return res.status(200).json({
                 errorCode: 0,

@@ -42,9 +42,9 @@ const getAllCustomersService = async (queryString) => {
             delete filter.page
             delete filter.population
             offset = (page - 1) * limit;
-            result = await Customer.find(filter).skip(offset).limit(limit).populate(population).exec();
+            result = await Customer.find(filter).skip(offset).limit(limit).populate(population).sort({ _id: 1 }).exec();
         } else {
-            result = await Customer.find({}).populate(population).exec();
+            result = await Customer.find({}).populate(population).sort({ _id: -1 }).exec();
 
         }
         return result;
@@ -56,12 +56,11 @@ const getAllCustomersService = async (queryString) => {
 
 const updateACustomerService = async (data) => {
     try {
-
+        let { name, email, address, phone, role, gender, password, _id } = data;
         let res = await Customer.updateOne(
             {
-                ...data._id
+                _id
             },
-
             {
                 ...data
             }
