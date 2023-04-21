@@ -38,11 +38,14 @@ const getAllCustomersService = async (queryString) => {
         let result = null;
         let { filter, limit } = aqp(queryString)
         let { page, population } = filter;
+
         if (limit && page) {
             delete filter.page
             delete filter.population
             offset = (page - 1) * limit;
-            result = await Customer.find(filter).skip(offset).limit(limit).populate(population).sort({ _id: 1 }).exec();
+            result = await Customer.find(filter).skip(offset).limit(limit).populate(population).sort({ _id: -1 }).exec();
+
+
         } else {
             result = await Customer.find({}).populate(population).sort({ _id: -1 }).exec();
 

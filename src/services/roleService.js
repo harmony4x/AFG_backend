@@ -26,9 +26,9 @@ module.exports = {
                 delete filter.page
 
                 offset = (page - 1) * limit;
-                result = await Role.find(filter).skip(offset).limit(limit).exec();
+                result = await Role.find(filter).skip(offset).limit(limit).sort({ _id: -1 }).exec();
             } else {
-                result = await Role.find({});
+                result = await Role.find({}).sort({ _id: -1 }).exec();
             }
             return result;
         } catch (error) {
@@ -37,14 +37,15 @@ module.exports = {
     },
     updateARoleService: async (data) => {
         try {
-
+            let _id = data._id;
+            let name = data.name;
             let res = await Role.updateOne(
                 {
-                    ...data._id
+                    _id
                 },
 
                 {
-                    ...data
+                    name
                 }
             )
             return res;
@@ -57,7 +58,7 @@ module.exports = {
     deleteARoleService: async (_id) => {
         try {
             let result = await Role.deleteById({ _id });
-            console.log(result);
+
             return result;
         } catch (error) {
 

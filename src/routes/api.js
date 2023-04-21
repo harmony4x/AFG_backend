@@ -21,6 +21,7 @@ const { authPage } = require('../middleware/auth')
 const { createRole, getAllRole, updateARole, deleteARole } = require('../controllers/roleController')
 const { createCategory, getAllCategory, updateACategory, deleteACategory } = require('../controllers/categoryController')
 const { deleteACategoryService } = require('../services/categoryService')
+const { createSeries, getAllSeries, updateASeries, deleteASeries } = require('../controllers/seriesController')
 
 router.get('/user', getHomePage)
 router.post('/user', createUser)
@@ -50,6 +51,16 @@ router.post('/categories', createCategory);
 router.get('/categories', getAllCategory);
 router.put('/categories', updateACategory);
 router.delete('/categories', deleteACategory);
+
+
+
+
+
+
+router.post('/series', createSeries);
+router.get('/series', getAllSeries);
+router.put('/series', updateASeries);
+router.delete('/series', deleteASeries);
 
 
 

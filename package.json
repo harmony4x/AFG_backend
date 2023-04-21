@@ -34,7 +34,8 @@
     "mongoose": "6.7.2",
     "mongoose-delete": "0.5.4",
     "mysql2": "2.3.3",
-    "redis": "4.6.5"
+    "redis": "4.6.5",
+    "unique-slug": "^4.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22",

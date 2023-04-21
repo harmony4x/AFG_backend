@@ -1,20 +1,23 @@
 const createError = require('http-errors');
-const { categoryValidate } = require('../middleware/validation');
-const { createCategoryService, isExits, getAllCategoryService, updateACategoryService, deleteACategoryService } = require('../services/categoryService');
-const create_slug = require('slug')
+const { seriesValidate } = require('../middleware/validation');
+
+const create_slug = require('slug');
+const { isExits, createSeriesService, getAllSeriesService, updateASeriesService, deleteASeriesService } = require('../services/seriesService');
+
 const crypto = require('crypto');
 
 
 
-
 module.exports = {
-    createCategory: async (req, res, next) => {
+    createSeries: async (req, res, next) => {
         try {
-            let slug2 = create_slug(req.body.title) + '-' + crypto.randomBytes(4).toString('hex')
-            console.log()
-            let { title } = req.body;
 
-            let { error } = categoryValidate(req.body);
+            let slug2 = create_slug(req.body.title) + '-' + crypto.randomBytes(4).toString('hex')
+
+            let { title, description } = req.body;
+
+
+            let { error } = seriesValidate(req.body);
 
             if (error) {
                 throw createError(error.details[0].message)
@@ -26,12 +29,12 @@ module.exports = {
                 throw createError.Conflict(`${title} is already exists`);
             }
 
-            let category = await createCategoryService(title, slug2);
-            if (category) {
+            let series = await createSeriesService(title, slug2, description);
+            if (series) {
                 return res.status(200).json({
                     errorCode: 0,
-                    data: category,
-                    msg: "Sucessfully created category"
+                    data: series,
+                    msg: "Sucessfully created series"
                 })
             }
 
@@ -43,9 +46,9 @@ module.exports = {
         }
 
     },
-    getAllCategory: async (req, res) => {
+    getAllSeries: async (req, res) => {
         try {
-            result = await getAllCategoryService(req.query);
+            result = await getAllSeriesService(req.query);
 
             return res.status(200).json({
                 errorCode: 0,
@@ -58,13 +61,16 @@ module.exports = {
             })
         }
     },
-    updateACategory: async (req, res) => {
+    updateASeries: async (req, res) => {
         try {
-            let { _id, title } = req.body
+            let { _id, title, description } = req.body
 
             let slug2 = create_slug(req.body.title) + '-' + crypto.randomBytes(4).toString('hex')
 
-            let result = await updateACategoryService(_id, title, slug2);
+
+
+            let result = await updateASeriesService(_id, title, slug2, description);
+
             return res.status(200).json({
                 errorCode: 0,
                 data: result
@@ -78,10 +84,10 @@ module.exports = {
             })
         }
     },
-    deleteACategory: async (req, res) => {
+    deleteASeries: async (req, res) => {
         try {
             let { _id } = req.body;
-            let result = await deleteACategoryService(_id);
+            let result = await deleteASeriesService(_id);
             return res.status(200).json({
                 errorCode: 0,
                 data: result

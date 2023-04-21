@@ -69,12 +69,25 @@ const categoryValidate = (data) => {
             .min(3)
             .max(30)
             .required(),
-        slug: Joi.string()
-            .min(3)
-            .required(),
+
     })
     return category.validate(data);
 }
+
+const seriesValidate = (data) => {
+    const series = Joi.object({
+
+        title: Joi.string()
+            .min(3)
+            .max(30)
+            .required(),
+        description: Joi.string()
+            .min(3)
+            .max(30)
+    })
+    return series.validate(data);
+}
+
 
 
 module.exports = {
@@ -82,4 +95,5 @@ module.exports = {
     loginValidate,
     roleValidate,
     categoryValidate,
+    seriesValidate
 }

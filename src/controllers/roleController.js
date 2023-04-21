@@ -58,6 +58,7 @@ module.exports = {
     updateARole: async (req, res) => {
         try {
             let data = req.body;
+
             let result = await updateARoleService(data);
             return res.status(200).json({
                 errorCode: 0,

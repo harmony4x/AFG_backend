@@ -1,17 +1,18 @@
 const aqp = require('api-query-params');
 const Category = require('../models/category');
 
-const isExits = async (title) => {
-    const checkTitle = await Category.findOne({ title });
+const isExits = async (slug) => {
+    const checkTitle = await Category.findOne({ slug });
 
     return checkTitle;
 }
 
-const createCategoryService = async (categoryData) => {
+const createCategoryService = async (title, slug) => {
     try {
 
         let category = new Category({
-            ...categoryData
+            title,
+            slug
         })
         let res = await category.save();
         return res
@@ -26,13 +27,13 @@ const getAllCategoryService = async (queryString) => {
 
         let result = null;
         let { filter, limit } = aqp(queryString)
+        let { page } = filter;
         if (limit && page) {
             delete filter.page
             offset = (page - 1) * limit;
-            result = await Category.find(filter).skip(offset).limit(limit).exec();
+            result = await Category.find(filter).skip(offset).limit(limit).sort({ _id: -1 }).exec();
         } else {
-            console.log("1")
-            result = await Category.find({}).exec();
+            result = await Category.find({}).sort({ _id: -1 }).exec();
 
         }
         return result;
@@ -42,15 +43,16 @@ const getAllCategoryService = async (queryString) => {
     }
 }
 
-const updateACategoryService = async (data) => {
+const updateACategoryService = async (_id, title, slug) => {
     try {
 
         let res = await Category.updateOne(
             {
-                ...data._id
+                _id
             },
             {
-                ...data
+                title,
+                slug
             }
         )
         return res;
