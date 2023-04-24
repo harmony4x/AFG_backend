@@ -5,12 +5,15 @@ const { uploadSingleFile } = require('../services/fileService');
 const createError = require('http-errors');
 const bcrypt = require('bcrypt');
 const { uploadFile } = require('../models/upload');
+const cloudinary = require('cloudinary').v2;
 
 module.exports = {
     createCustomerUser: async (req, res, next) => {
 
         try {
             let { email } = req.body;
+            let fileData = req.file
+            console.log(fileData);
             let phone = '';
             let birthday = new Date();
             let { error } = userValidate(req.body);
@@ -24,16 +27,8 @@ module.exports = {
             if (checkEmail !== null) {
                 throw createError.Conflict(`${email} is already registered`);
             }
+            let image = 'https://res.cloudinary.com/ddvhpz8hw/image/upload/v1682315730/AFG_uploads/nwhywznashlqrng6jc6w.png'
 
-            let uploadImage = '';
-            if (!req.files || Object.keys(req.files).length === 0) {
-
-            } else {
-                file = req.files.image;
-                let result = await uploadSingleFile(file);
-                uploadImage = result.path;
-            }
-            const image = await uploadFile({ shared: true }, uploadImage)
             let customerData = { ...req.body, image, phone, birthday }
 
             let customer = await createCustomerService(customerData);
@@ -89,10 +84,13 @@ module.exports = {
     },
     updateACustomer: async (req, res) => {
         try {
+            let fileData = req.file
+            let image = fileData?.path
             let { name, email, address, phone, role, gender, password, _id } = req.body;
             let data = {
-                name, email, address, phone, role, gender, password, _id
+                name, email, address, phone, role, gender, password, _id, image
             }
+
             let result = await updateACustomerService(data);
             return res.status(200).json({
                 errorCode: 0,

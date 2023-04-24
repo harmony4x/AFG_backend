@@ -59,7 +59,8 @@ const getAllCustomersService = async (queryString) => {
 
 const updateACustomerService = async (data) => {
     try {
-        let { name, email, address, phone, role, gender, password, _id } = data;
+        let { name, email, address, phone, role, gender, password, _id, image } = data;
+
         let res = await Customer.updateOne(
             {
                 _id

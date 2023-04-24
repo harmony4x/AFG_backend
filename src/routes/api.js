@@ -22,6 +22,7 @@ const { createRole, getAllRole, updateARole, deleteARole } = require('../control
 const { createCategory, getAllCategory, updateACategory, deleteACategory } = require('../controllers/categoryController')
 const { deleteACategoryService } = require('../services/categoryService')
 const { createSeries, getAllSeries, updateASeries, deleteASeries } = require('../controllers/seriesController')
+const uploadCloud = require('../middleware/cloudinary')
 
 router.get('/user', getHomePage)
 router.post('/user', createUser)
@@ -31,10 +32,10 @@ router.post('/upload-file', uploadSingle)
 router.post('/upload-files', uploadMultipleAPI)
 
 
-router.post('/customer', createCustomerUser);
+router.post('/customer', uploadCloud.single('image'), createCustomerUser);
 router.post('/customers', createArrayUser);
 router.get('/customers', getAllCustomers);
-router.put('/customers', updateACustomer);
+router.put('/customers', uploadCloud.single('image'), updateACustomer);
 router.delete('/customers', deleteACustomer);
 router.delete('/customers-many', deleteArrayCustomer);
 
