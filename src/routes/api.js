@@ -55,10 +55,10 @@ router.delete('/categories', deleteACategory);
 
 
 
-router.post('/series', createCategory);
-router.get('/series', getAllCategory);
-router.put('/series', updateACategory);
-router.delete('/series', deleteACategory);
+router.post('/series', createSeries);
+router.get('/series', getAllSeries);
+router.put('/series', updateASeries);
+router.delete('/series', deleteASeries);
 
 
 
