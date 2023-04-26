@@ -4,7 +4,7 @@ const { uploadSingleFile, uploadMultipleFile } = require("../services/fileServic
 
 const getHomePage = async (req, res) => {
     let payload = req.payload.role;
-    console.log(payload);
+
     return res.status(200).json(
         {
             errorCode: 0,

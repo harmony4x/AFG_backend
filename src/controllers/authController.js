@@ -23,8 +23,9 @@ module.exports = {
             if (checkEmail !== null) {
                 throw createError.Conflict(`${email} is already registered`);
             }
+            let image = 'https://res.cloudinary.com/ddvhpz8hw/image/upload/v1682315730/AFG_uploads/nwhywznashlqrng6jc6w.png'
 
-            let customerData = { ...req.body }
+            let customerData = { ...req.body, image }
 
             let customer = await registerService(customerData);
             if (customer) {
@@ -69,6 +70,9 @@ module.exports = {
                     accessToken,
                     refreshToken
                 ],
+                name: user.name,
+                email: user.email,
+                image: user.image,
                 msg: 'Login successful'
             })
 
@@ -115,7 +119,9 @@ module.exports = {
 
     logout: async (req, res, next) => {
         try {
+
             const { refreshToken } = req.body;
+            console.log(req.body)
             if (!refreshToken) {
                 throw createError.BadRequest()
             }

@@ -32,11 +32,11 @@ router.post('/upload-file', uploadSingle)
 router.post('/upload-files', uploadMultipleAPI)
 
 
-router.post('/customer', uploadCloud.single('image'), createCustomerUser);
+router.post('/customer', verifyAccessToken, authPage('admin'), uploadCloud.single('image'), createCustomerUser);
 router.post('/customers', createArrayUser);
-router.get('/customers', getAllCustomers);
-router.put('/customers', uploadCloud.single('image'), updateACustomer);
-router.delete('/customers', deleteACustomer);
+router.get('/customers', verifyAccessToken, authPage('admin'), getAllCustomers);
+router.put('/customers', verifyAccessToken, authPage('admin'), uploadCloud.single('image'), updateACustomer);
+router.delete('/customers', verifyAccessToken, authPage('admin'), deleteACustomer);
 router.delete('/customers-many', deleteArrayCustomer);
 
 
@@ -66,10 +66,9 @@ router.delete('/series', deleteASeries);
 
 router.post('/register', register);
 router.post('/login', login);
-router.get('/check-token', verifyAccessToken, authPage('ADMIN'), getHomePage);
+router.get('/check-token', verifyAccessToken, getHomePage);
 router.post('/refresh-token', refreshToken);
-
-router.delete('/logout', logout)
+router.post('/logout', logout)
 
 
 module.exports = router;

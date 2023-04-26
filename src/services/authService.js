@@ -8,7 +8,7 @@ const isExits = async (email) => {
 const registerService = async (data) => {
     try {
         let role = '643e544f55efd99c53cf6691'
-        let { email, password, name } = data;
+        let { email, password, name, image } = data;
         let user = await new Customer({
             email,
             password,
@@ -16,7 +16,7 @@ const registerService = async (data) => {
             role,
             address: '',
             gender: 0,
-            image: '',
+            image,
             phone: '',
         });
         let res = user.save();
