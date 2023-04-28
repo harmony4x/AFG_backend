@@ -83,7 +83,8 @@ const seriesValidate = (data) => {
             .required(),
         description: Joi.string()
             .min(3)
-            .max(30)
+            .max(30),
+        userId: Joi.string()
     })
     return series.validate(data);
 }

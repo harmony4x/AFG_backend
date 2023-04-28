@@ -1,6 +1,14 @@
 
 const { userValidate } = require('../middleware/validation');
-const { createCustomerService, createArrayCustomerService, getAllCustomersService, updateACustomerService, deleteACustomerService, deleteArrayCustomerService, isExits } = require('../services/customerService');
+const {
+    createCustomerService,
+    createArrayCustomerService,
+    getAllCustomersService,
+    updateACustomerService,
+    deleteACustomerService,
+    deleteArrayCustomerService,
+    isExits,
+    getACustomerService } = require('../services/customerService');
 const { uploadSingleFile } = require('../services/fileService');
 const createError = require('http-errors');
 const bcrypt = require('bcrypt');
@@ -13,7 +21,7 @@ module.exports = {
         try {
             let { email } = req.body;
             let fileData = req.file
-            console.log(fileData);
+
             let phone = '';
             let birthday = new Date();
             let { error } = userValidate(req.body);
@@ -82,13 +90,35 @@ module.exports = {
 
 
     },
+    getACustomers: async (req, res) => {
+        try {
+
+            let _id = req.body;
+            result = await getACustomerService(_id);
+
+            return res.status(200).json({
+                errorCode: 0,
+                data: result
+            })
+        } catch (error) {
+            return res.status(200).json({
+                errorCode: 0,
+                data: error
+            })
+        }
+
+
+    },
     updateACustomer: async (req, res) => {
         try {
+            let defaultImage = 'https://res.cloudinary.com/ddvhpz8hw/image/upload/v1682315730/AFG_uploads/nwhywznashlqrng6jc6w.png'
             let fileData = req.file
             let image = fileData?.path
-            let { name, email, address, phone, role, gender, password, _id } = req.body;
+
+            let { name, email, address, phone, role, gender, password, _id, birthday, oldImage } = req.body;
+
             let data = {
-                name, email, address, phone, role, gender, password, _id, image
+                name, email, address, phone, role, gender, password, _id, image, birthday
             }
 
             let result = await updateACustomerService(data);
@@ -98,6 +128,8 @@ module.exports = {
 
             })
         } catch (error) {
+            let fileData = req.file
+            if (fileData) cloudinary.uploader.destroy(fileData.filename)
             return res.status(200).json({
                 errorCode: -1,
                 data: error

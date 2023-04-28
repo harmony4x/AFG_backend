@@ -11,7 +11,7 @@ module.exports = {
     createCategory: async (req, res, next) => {
         try {
             let slug2 = create_slug(req.body.title) + '-' + crypto.randomBytes(4).toString('hex')
-            console.log()
+
             let { title } = req.body;
 
             let { error } = categoryValidate(req.body);
@@ -67,7 +67,8 @@ module.exports = {
             let result = await updateACategoryService(_id, title, slug2);
             return res.status(200).json({
                 errorCode: 0,
-                data: result
+                data: result,
+                msg: "Sucessfully update category"
 
             })
         } catch (error) {

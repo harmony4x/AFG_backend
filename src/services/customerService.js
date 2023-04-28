@@ -57,6 +57,18 @@ const getAllCustomersService = async (queryString) => {
     }
 }
 
+const getACustomerService = async (_id) => {
+    try {
+        let population = 'role'
+        let result = await Customer.find({ _id }).populate(population).exec();
+        return result;
+
+    } catch (error) {
+        return error;
+
+    }
+}
+
 const updateACustomerService = async (data) => {
     try {
         let { name, email, address, phone, role, gender, password, _id, image } = data;
@@ -105,4 +117,5 @@ module.exports = {
     deleteACustomerService,
     deleteArrayCustomerService,
     isExits,
+    getACustomerService,
 }

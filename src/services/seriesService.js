@@ -8,13 +8,14 @@ const isExits = async (slug) => {
     return checkTitle;
 }
 
-const createSeriesService = async (title, slug, description) => {
+const createSeriesService = async (title, slug, description, userId) => {
     try {
-        console.log(title, slug, description);
+
         let series = new Series({
             title,
             slug,
-            description
+            description,
+            userId
         })
         let res = await series.save();
         return res
@@ -29,14 +30,16 @@ const getAllSeriesService = async (queryString) => {
 
         let result = null;
         let { filter, limit } = aqp(queryString)
-        let { page } = filter;
+        let { page, population } = filter;
+
         if (limit && page) {
             delete filter.page
+            delete filter.population
             offset = (page - 1) * limit;
-            result = await Series.find(filter).skip(offset).limit(limit).sort({ _id: -1 }).exec();
+            result = await Series.find(filter).skip(offset).limit(limit).populate(population).sort({ _id: -1 }).exec();
         } else {
 
-            result = await Series.find({}).sort({ _id: -1 }).exec();
+            result = await Series.find({}).populate(population).sort({ _id: -1 }).exec();
 
         }
         return result;

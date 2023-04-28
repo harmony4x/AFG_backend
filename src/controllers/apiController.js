@@ -3,7 +3,7 @@ const User = require("../models/user");
 const { uploadSingleFile, uploadMultipleFile } = require("../services/fileService");
 
 const getHomePage = async (req, res) => {
-    let payload = req.payload.role;
+    let payload = req.payload;
 
     return res.status(200).json(
         {

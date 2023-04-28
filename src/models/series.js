@@ -9,6 +9,7 @@ const seriesSchema = new mongoose.Schema(
         title: String,
         slug: String,
         description: String,
+        userId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'customer' }],
 
     },
     {

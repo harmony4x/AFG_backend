@@ -57,7 +57,8 @@ module.exports = {
             if (user == null) {
                 throw createError.NotFound('User not registered');
             }
-            const isValid = bcrypt.compare(user.password, password);
+
+            const isValid = await user.isCheckPassword(password);
             if (!isValid) {
                 throw createError.Unauthorized();
             }
@@ -121,7 +122,7 @@ module.exports = {
         try {
 
             const { refreshToken } = req.body;
-            console.log(req.body)
+
             if (!refreshToken) {
                 throw createError.BadRequest()
             }

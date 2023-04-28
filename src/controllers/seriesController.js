@@ -12,12 +12,10 @@ module.exports = {
     createSeries: async (req, res, next) => {
         try {
 
-            let slug2 = create_slug(req.body.title) + '-' + crypto.randomBytes(4).toString('hex')
+            let { title, description, userId } = req.body.data;
 
-            let { title, description } = req.body;
-
-
-            let { error } = seriesValidate(req.body);
+            let slug2 = create_slug(title) + '-' + crypto.randomBytes(4).toString('hex')
+            let { error } = seriesValidate(req.body.data);
 
             if (error) {
                 throw createError(error.details[0].message)
@@ -29,7 +27,7 @@ module.exports = {
                 throw createError.Conflict(`${title} is already exists`);
             }
 
-            let series = await createSeriesService(title, slug2, description);
+            let series = await createSeriesService(title, slug2, description, userId);
             if (series) {
                 return res.status(200).json({
                     errorCode: 0,
@@ -63,9 +61,10 @@ module.exports = {
     },
     updateASeries: async (req, res) => {
         try {
-            let { _id, title, description } = req.body
 
-            let slug2 = create_slug(req.body.title) + '-' + crypto.randomBytes(4).toString('hex')
+            let { _id, title, description } = req.body.data
+
+            let slug2 = create_slug(title) + '-' + crypto.randomBytes(4).toString('hex')
 
 
 
@@ -73,7 +72,8 @@ module.exports = {
 
             return res.status(200).json({
                 errorCode: 0,
-                data: result
+                data: result,
+                msg: 'Updated Series Successfully'
 
             })
         } catch (error) {

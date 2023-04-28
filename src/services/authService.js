@@ -18,6 +18,7 @@ const registerService = async (data) => {
             gender: 0,
             image,
             phone: '',
+            birthday: '1970-1-1',
         });
         let res = user.save();
         return res;

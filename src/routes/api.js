@@ -13,6 +13,7 @@ const { createCustomerUser,
     updateACustomer,
     deleteACustomer,
     deleteArrayCustomer,
+    getACustomers,
 } = require('../controllers/customerController')
 const { register, login, refreshToken, logout } = require('../controllers/authController')
 const { verifyAccessToken, verifyRefreshToken } = require('../middleware/jwtService')
@@ -35,23 +36,25 @@ router.post('/upload-files', uploadMultipleAPI)
 router.post('/customer', verifyAccessToken, authPage('admin'), uploadCloud.single('image'), createCustomerUser);
 router.post('/customers', createArrayUser);
 router.get('/customers', verifyAccessToken, authPage('admin'), getAllCustomers);
-router.put('/customers', verifyAccessToken, authPage('admin'), uploadCloud.single('image'), updateACustomer);
+router.post('/customerbyId', getACustomers);
+
+router.put('/customers', uploadCloud.single('image'), updateACustomer);
 router.delete('/customers', verifyAccessToken, authPage('admin'), deleteACustomer);
 router.delete('/customers-many', deleteArrayCustomer);
 
 
 
-router.post('/role', createRole);
-router.get('/role', getAllRole);
-router.put('/role', updateARole);
-router.delete('/role', deleteARole);
+router.post('/role', verifyAccessToken, authPage('admin'), createRole);
+router.get('/role', verifyAccessToken, authPage('admin'), getAllRole);
+router.put('/role', verifyAccessToken, authPage('admin'), updateARole);
+router.delete('/role', verifyAccessToken, authPage('admin'), deleteARole);
 
 
 
-router.post('/categories', createCategory);
-router.get('/categories', getAllCategory);
-router.put('/categories', updateACategory);
-router.delete('/categories', deleteACategory);
+router.post('/categories', verifyAccessToken, authPage('admin'), createCategory);
+router.get('/categories', verifyAccessToken, authPage('admin'), getAllCategory);
+router.put('/categories', verifyAccessToken, authPage('admin'), updateACategory);
+router.delete('/categories', verifyAccessToken, authPage('admin'), deleteACategory);
 
 
 
