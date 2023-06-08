@@ -49,6 +49,17 @@ const getAllSeriesService = async (queryString) => {
     }
 }
 
+const getSeriesByIdService = async (userId) => {
+    try {
+
+        let result = await Series.find({ userId }).sort({ _id: -1 }).exec();
+        return result;
+    } catch (error) {
+
+        return error;
+    }
+}
+
 const updateASeriesService = async (_id, title, slug, description) => {
     try {
 
@@ -84,6 +95,7 @@ module.exports = {
     createSeriesService,
     getAllSeriesService,
     updateASeriesService,
-    deleteASeriesService
+    deleteASeriesService,
+    getSeriesByIdService
 
 }

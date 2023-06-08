@@ -65,6 +65,7 @@ const updateACategoryService = async (_id, title, slug) => {
 const deleteACategoryService = async (_id) => {
     try {
         let result = await Category.deleteById(_id);
+
         return result;
     } catch (error) {
 

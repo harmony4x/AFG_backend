@@ -89,6 +89,40 @@ const seriesValidate = (data) => {
     return series.validate(data);
 }
 
+const postValidate = (data) => {
+    const post = Joi.object({
+        title: Joi.string()
+            .min(3)
+            .max(30)
+            .required(),
+        description: Joi.string()
+            .min(3)
+            .max(30),
+        content: Joi.string()
+            .min(3)
+            .max(30)
+            .required(),
+        user: Joi.string()
+            .required(),
+        series: Joi.string()
+            .required(),
+        category: Joi.string()
+            .required(),
+
+    })
+    return post.validate(data);
+}
+
+const imageValidate = (data) => {
+    const image = Joi.object({
+
+        title: Joi.string()
+            .required(),
+
+    })
+    return image.validate(data);
+}
+
 
 
 module.exports = {
@@ -96,5 +130,7 @@ module.exports = {
     loginValidate,
     roleValidate,
     categoryValidate,
-    seriesValidate
+    seriesValidate,
+    imageValidate,
+    postValidate
 }

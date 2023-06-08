@@ -2,7 +2,7 @@ const createError = require('http-errors');
 const { seriesValidate } = require('../middleware/validation');
 
 const create_slug = require('slug');
-const { isExits, createSeriesService, getAllSeriesService, updateASeriesService, deleteASeriesService } = require('../services/seriesService');
+const { isExits, createSeriesService, getAllSeriesService, updateASeriesService, deleteASeriesService, getSeriesByIdService } = require('../services/seriesService');
 
 const crypto = require('crypto');
 
@@ -47,6 +47,22 @@ module.exports = {
     getAllSeries: async (req, res) => {
         try {
             result = await getAllSeriesService(req.query);
+
+            return res.status(200).json({
+                errorCode: 0,
+                data: result
+            })
+        } catch (error) {
+            return res.status(200).json({
+                errorCode: 0,
+                data: error
+            })
+        }
+    },
+    getSeriesById: async (req, res) => {
+        try {
+
+            result = await getSeriesByIdService(req.params.userId);
 
             return res.status(200).json({
                 errorCode: 0,

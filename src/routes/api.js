@@ -1,5 +1,7 @@
 const express = require('express')
 const router = express.Router()
+const { asyncHandler } = require('../helpers/asyncHandler')
+
 const { getHomePage,
     createUser,
     updateUser,
@@ -14,6 +16,7 @@ const { createCustomerUser,
     deleteACustomer,
     deleteArrayCustomer,
     getACustomers,
+    getACustomerByEmail,
 } = require('../controllers/customerController')
 const { register, login, refreshToken, logout } = require('../controllers/authController')
 const { verifyAccessToken, verifyRefreshToken } = require('../middleware/jwtService')
@@ -22,8 +25,9 @@ const { authPage } = require('../middleware/auth')
 const { createRole, getAllRole, updateARole, deleteARole } = require('../controllers/roleController')
 const { createCategory, getAllCategory, updateACategory, deleteACategory } = require('../controllers/categoryController')
 const { deleteACategoryService } = require('../services/categoryService')
-const { createSeries, getAllSeries, updateASeries, deleteASeries } = require('../controllers/seriesController')
+const { createSeries, getAllSeries, updateASeries, deleteASeries, getSeriesById } = require('../controllers/seriesController')
 const uploadCloud = require('../middleware/cloudinary')
+const PostController = require('../controllers/postController')
 
 router.get('/user', getHomePage)
 router.post('/user', createUser)
@@ -37,6 +41,9 @@ router.post('/customer', verifyAccessToken, authPage('admin'), uploadCloud.singl
 router.post('/customers', createArrayUser);
 router.get('/customers', verifyAccessToken, authPage('admin'), getAllCustomers);
 router.post('/customerbyId', getACustomers);
+router.get('/customer/:email', getACustomerByEmail);
+
+
 
 router.put('/customers', uploadCloud.single('image'), updateACustomer);
 router.delete('/customers', verifyAccessToken, authPage('admin'), deleteACustomer);
@@ -52,7 +59,7 @@ router.delete('/role', verifyAccessToken, authPage('admin'), deleteARole);
 
 
 router.post('/categories', verifyAccessToken, authPage('admin'), createCategory);
-router.get('/categories', verifyAccessToken, authPage('admin'), getAllCategory);
+router.get('/categories', getAllCategory);
 router.put('/categories', verifyAccessToken, authPage('admin'), updateACategory);
 router.delete('/categories', verifyAccessToken, authPage('admin'), deleteACategory);
 
@@ -60,6 +67,8 @@ router.delete('/categories', verifyAccessToken, authPage('admin'), deleteACatego
 
 router.post('/series', createSeries);
 router.get('/series', getAllSeries);
+router.get('/series/:userId', getSeriesById);
+
 router.put('/series', updateASeries);
 router.delete('/series', deleteASeries);
 
@@ -72,6 +81,16 @@ router.post('/login', login);
 router.get('/check-token', verifyAccessToken, getHomePage);
 router.post('/refresh-token', refreshToken);
 router.post('/logout', logout)
+
+
+router.get('/posts', asyncHandler(PostController.findAllPost));
+router.get('/posts/:slug', asyncHandler(PostController.findPostBySlug));
+router.get('/user/:userId', asyncHandler(PostController.findPostByUser));
+
+router.use(verifyAccessToken)
+router.post('/posts', uploadCloud.single('image'), asyncHandler(PostController.createPost));
+router.patch('/posts', uploadCloud.single('image'), asyncHandler(PostController.updatePost));
+router.delete('/posts', asyncHandler(PostController.deletePost));
 
 
 module.exports = router;

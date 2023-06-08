@@ -8,7 +8,8 @@ const {
     deleteACustomerService,
     deleteArrayCustomerService,
     isExits,
-    getACustomerService } = require('../services/customerService');
+    getACustomerService,
+    getACustomerByEmailService } = require('../services/customerService');
 const { uploadSingleFile } = require('../services/fileService');
 const createError = require('http-errors');
 const bcrypt = require('bcrypt');
@@ -95,6 +96,26 @@ module.exports = {
 
             let _id = req.body;
             result = await getACustomerService(_id);
+
+            return res.status(200).json({
+                errorCode: 0,
+                data: result
+            })
+        } catch (error) {
+            return res.status(200).json({
+                errorCode: 0,
+                data: error
+            })
+        }
+
+
+    },
+
+    getACustomerByEmail: async (req, res) => {
+        try {
+
+            let { email } = req.params;
+            result = await getACustomerByEmailService(email, select = ['_id', 'name', 'email', 'image']);
 
             return res.status(200).json({
                 errorCode: 0,

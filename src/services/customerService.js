@@ -1,5 +1,6 @@
 const Customer = require('../models/customer');
 const aqp = require('api-query-params');
+const { getSelectData } = require('../utils');
 
 
 const isExits = async (email) => {
@@ -69,6 +70,21 @@ const getACustomerService = async (_id) => {
     }
 }
 
+
+const getACustomerByEmailService = async (email, select) => {
+    try {
+
+        let result = await Customer.findOne({ email })
+            .select(getSelectData(select))
+            .exec();
+        return result;
+
+    } catch (error) {
+        return error;
+
+    }
+}
+
 const updateACustomerService = async (data) => {
     try {
         let { name, email, address, phone, role, gender, password, _id, image } = data;
@@ -118,4 +134,5 @@ module.exports = {
     deleteArrayCustomerService,
     isExits,
     getACustomerService,
+    getACustomerByEmailService
 }
