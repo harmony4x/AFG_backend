@@ -74,6 +74,7 @@ module.exports = {
                 name: user.name,
                 email: user.email,
                 image: user.image,
+                _id: user._id,
                 msg: 'Login successful'
             })
 

@@ -28,6 +28,8 @@ const { deleteACategoryService } = require('../services/categoryService')
 const { createSeries, getAllSeries, updateASeries, deleteASeries, getSeriesById } = require('../controllers/seriesController')
 const uploadCloud = require('../middleware/cloudinary')
 const PostController = require('../controllers/postController')
+const commentController = require('../controllers/commentController')
+const notificationController = require('../controllers/notificationController')
 
 router.get('/user', getHomePage)
 router.post('/user', createUser)
@@ -87,10 +89,19 @@ router.get('/posts', asyncHandler(PostController.findAllPost));
 router.get('/posts/:slug', asyncHandler(PostController.findPostBySlug));
 router.get('/user/:userId', asyncHandler(PostController.findPostByUser));
 
+
+router.post('/notification', asyncHandler(notificationController.createNotification));
+router.get('/notification/:userId', asyncHandler(notificationController.findNotificationByPost));
+
 router.use(verifyAccessToken)
 router.post('/posts', uploadCloud.single('image'), asyncHandler(PostController.createPost));
 router.patch('/posts', uploadCloud.single('image'), asyncHandler(PostController.updatePost));
 router.delete('/posts', asyncHandler(PostController.deletePost));
 
+
+router.post('/comments', asyncHandler(commentController.createComment));
+router.patch('/comments', asyncHandler(commentController.updateComment));
+router.get('/comments/:postId', asyncHandler(commentController.findCommentByPost));
+router.delete('/comments', asyncHandler(commentController.DeleteCommentByPost));
 
 module.exports = router;

@@ -28,6 +28,20 @@ const removeUndefinedObject = obj => {
 
 }
 
+const removeUndefinedObjectV2 = obj => {
+
+    Object.keys(obj).forEach(k => {
+
+        if (obj[k] === undefined) {
+            delete obj[k];
+        }
+    })
+
+
+    return obj;
+
+}
+
 /*
 
     const a = {
@@ -65,5 +79,6 @@ module.exports = {
     getSelectData,
     unGetSelectData,
     removeUndefinedObject,
-    updateNestedObjectParse
+    updateNestedObjectParse,
+    removeUndefinedObjectV2
 }
